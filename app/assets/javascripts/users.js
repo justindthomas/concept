@@ -20,9 +20,7 @@ jQuery(function($) {
         for(var i = 0; i < data.length; i++) {
           messages.push({ "id":data[i]["id"], "body":data[i]["body"] })
         }
-        if(message_keys[messages[0].id] !== undefined) {
-		decrypt_messages();
-	}
+	$("#messages_status").html("Messages loaded.")
       }
     });
 
@@ -33,9 +31,7 @@ jQuery(function($) {
         for(var i = 0; i < data.length; i++) {
           message_keys[data[i]["message_id"]] = data[i]["encrypted_key"]
         }
-	if(messages.length > 0) {
-	  decrypt_messages();
-	}
+	$("#message_keys_status").html("Message keys loaded.")
       }
     });
   } 
