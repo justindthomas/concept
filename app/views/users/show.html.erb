@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<input id="user_uuid" type="hidden" value="<%= @user.uuid %>"/>
+<input id="public_key" type="hidden" value="<%= @user.public_key %>"/>
+<input id="encrypted_private_key" type="hidden" value="<%= @user.encrypted_private_key %>"/>
+
+<p>
+  <b>Uuid:</b>
+  <%= @user.uuid %>
+</p>
+
+<div>
+  <label for="passphrase">Passphrase</label>
+  <input type="text" id="passphrase" size="30" />
+</div>
+
+<%= link_to 'Decrypt', '#', :id => 'decrypt' %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Message</th>
+    </tr>
+  </thead>
+  <tbody id="messages"></tbody>
+</table>
+
+<%= link_to 'Edit', users_uuid_edit_path(@user.uuid) %> |
+<%= link_to 'Back', users_path %>
