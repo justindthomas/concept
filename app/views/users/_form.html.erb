@@ -2,18 +2,14 @@
   <label for="entropy">Entropy:</label>
   <span id="entropy">0.00</span>
 </div>
-<div>
-  <label for="private_key">Private Key:</label><br />
-  <input id="private_key" type="text" size="30" value="insufficient entropy"/>
-</div>
-<div>
-  <label for="signing_key">Signing Key:</label><br />
-  <input id="signing_key" type="text" size="30" value="insufficient entropy"/>
-</div>
+
+<input id="private_key" type="hidden" value="insufficient entropy"/>
+<input id="signing_key" type="hidden" value="insufficient entropy"/>
+
 <div>
   <label for="passphrase">Passphrase</label><br />
   <input id="passphrase" type="text" size="30" />
-  <%= link_to 'Encrypt Keys', '#', :id => 'encrypt_keys' %>
+  <span id="encrypted"><%= link_to 'Encrypt Keys', '#', :id => 'encrypt_keys' %></span>
 </div>
 
 <%= form_for(@user, :url => users_path, :remote => true) do |f| %>
@@ -29,22 +25,11 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :encrypted_private_key %><br />
-    <%= f.text_field :encrypted_private_key %>
-  </div>
-  <div class="field">
-    <%= f.label :public_key %><br />
-    <%= f.text_field :public_key %>
-  </div>
-  <div class="field">
-    <%= f.label :encrypted_signing_key %><br />
-    <%= f.text_field :encrypted_signing_key %>
-  </div>
-  <div class="field">
-    <%= f.label :verification_key %><br />
-    <%= f.text_field :verification_key %>
-  </div>
+  <%= f.hidden_field :encrypted_private_key %>
+  <%= f.hidden_field :public_key %>
+  <%= f.hidden_field :encrypted_signing_key %>
+  <%= f.hidden_field :verification_key %>
+
   <div class="actions">
     <%= f.submit %>
   </div>
