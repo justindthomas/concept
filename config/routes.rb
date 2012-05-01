@@ -12,6 +12,8 @@ Board::Application.routes.draw do
   match 'messages' => 'messages#index', :via => :get, :as => "messages"
   match 'messages' => 'messages#create', :via => :post, :as => "messages"
 
+  match '/' => 'users#index'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
