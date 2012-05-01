@@ -1,12 +1,12 @@
 <div>
   <label for="entropy">Entropy:</label>
-  <span id="entropy">0.00</span>
+  <span id="entropy">None</span>
 </div>
 
 <input id="private_key" type="hidden" value="insufficient entropy"/>
 <input id="signing_key" type="hidden" value="insufficient entropy"/>
 
-<div>
+<div id="passphrase-div">
   <label for="passphrase">Passphrase</label><br />
   <input id="passphrase" type="text" size="30" />
   <span id="encrypted"><%= link_to 'Encrypt Keys', '#', :id => 'encrypt_keys' %></span>

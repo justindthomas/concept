@@ -4,16 +4,12 @@
   <tr>
     <th>Uuid</th>
     <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @users.each do |user| %>
   <tr>
     <td><%= user.uuid %></td>
     <td><%= link_to 'Show', users_uuid_path(user.uuid)  %></td>
-    <td><%= link_to 'Edit', users_uuid_edit_path(user.uuid) %></td>
-    <td><%= link_to 'Destroy', users_uuid_destroy_path(user.uuid), confirm: 'Are you sure?' %></td>
   </tr>
 <% end %>
 </table>

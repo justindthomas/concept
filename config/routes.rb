@@ -2,14 +2,15 @@ Board::Application.routes.draw do
   match 'users/new' => 'users#new'
   match 'users/:uuid/messages' => 'users#messages'
   match 'users/:uuid/message_keys' => 'users#message_keys'
-  match 'users/:uuid/edit' => 'users#edit', :as => "users_uuid_edit"
-  match 'users/:uuid/destroy' => 'users#destroy', :as => "users_uuid_destroy"
+  # match 'users/:uuid/edit' => 'users#edit', :as => "users_uuid_edit"
+  # match 'users/:uuid/destroy' => 'users#destroy', :as => "users_uuid_destroy"
   match 'users/:uuid' => 'users#show', :as => "users_uuid"
   match 'users' => 'users#index', :via => :get, :as => "users"
   match 'users' => 'users#create', :via => :post, :as => "users"
 
-  resources :users
-  resources :messages
+  match 'messages/new' => 'messages#new'
+  match 'messages' => 'messages#index', :via => :get, :as => "messages"
+  match 'messages' => 'messages#create', :via => :post, :as => "messages"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,12 +1,12 @@
 <div>
   <label for="entropy">Entropy:</label>
-  <span id="entropy">0.00</span>
+  <span id="entropy">None</span>
 </div>
 
+<div id="message">
 <div class="field">
   <label for="passphrase">Sender Passphrase</label><br />
   <input id="passphrase" />
-  <span id="authenticated"><%= link_to 'Retrieve and Decrypt Key', '#', :id => 'authenticate' %></span>
 </div>
 
 <%= form_for(@message, :remote => true) do |f| %>
@@ -43,3 +43,4 @@
     <%= f.submit %>
   </div>
 <% end %>
+</div>

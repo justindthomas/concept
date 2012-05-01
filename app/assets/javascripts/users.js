@@ -6,10 +6,23 @@ jQuery(function($) {
 	sjcl.random.startCollectors()
 
 	$("#encrypt_keys").bind('click', encrypt_keys)
-	$("#decrypt").bind('click', decrypt_messages)
+	$("#decrypt").bind('click', function() { 
+		decrypt_messages()  
+		verify_messages()
+		update()
+	})
+
+	if($("#encrypted").length != 0) {
+		$("#encrypted").hide()
+	}
 
 	if($("#recipient_uuid").length == 0) {
-		$(":submit").attr("disabled","disabled")
+		$(":submit").hide()
+	}
+
+	if($("#passphrase-div").length != 0) {
+		$("#passphrase-div").hide()
+		$("#notice").text("Move your mouse to generate entropy...")
 	}
 
 	if($("#user_uuid").length != 0) {
@@ -57,7 +70,7 @@ function generate_keys() {
 
 function update() {
 	for(var i = 0; i < messages.length; i++) {
-		$('#messages').append('<tr><td><span>' + messages[i].body + '</span></td></tr>')  
+		$('#messages').append('<tr><td><span>' + messages[i].user.uuid + '</span></td><td><span>' + messages[i].body + '</span></td><td>' + messages[i].verified + '</td></tr>')  
 	}
 }
 
@@ -65,18 +78,27 @@ function collect() {
         var progress = sjcl.random.getProgress(10)
 
         if(progress === undefined || progress == 1) {
-                $("#entropy").html("sufficient")
+                $("#entropy").text("Sufficient")
                 sjcl.random.stopCollectors()
                 $(window).unbind('mousemove', collect)
-		$(window).unbind('keypress', collect)
 		generate_keys()
+		$("#encrypted").show()
+		$("#passphrase-div").show()
+		$("#notice").text("")
         } else {
-                $("#entropy").html(progress.toFixed(2))
+		var percentage = progress * 100;
+                $("#entropy").text(percentage.toFixed(0) + "%")
         }
 }
 
 function encrypt_keys() {
 	var passphrase = $('#passphrase').val()
+	if(passphrase == "") {
+		$("#notice").text("Please enter a passphrase and try again...")
+		return;
+	} else {
+		$("#notice").text("")
+	}
 
 	var private_key = $('#private_key').val()
 	var enc = sjcl.encrypt(passphrase, private_key)
@@ -86,7 +108,8 @@ function encrypt_keys() {
 	var sign = sjcl.encrypt(passphrase, signing_key)
 	$('#user_encrypted_signing_key').val(JSON.stringify(sign))
 
-	$(':submit').removeAttr('disabled')
+	$("#encrypted").text("Keys Encrypted")
+	$(':submit').show()
 }
 
 function decrypt_messages() {
@@ -104,8 +127,6 @@ function decrypt_messages() {
 		message = sjcl.decrypt(key, messages[i].body)	
 		messages[i].body = message;
 	}
-
-	update();
 }
 
 function verify_messages() {
@@ -120,6 +141,6 @@ function verify_messages() {
         	var signing_key = new sjcl.ecc.ecdsa.publicKey(json.curve, point.curve, point)
 
 		var hash = sjcl.hash.sha256.hash(messages[i].body)
-		signing_key.verify(hash, JSON.parse(messages[i].signature))
+		messages[i].verified = signing_key.verify(hash, JSON.parse(messages[i].signature))
 	}
 } 
