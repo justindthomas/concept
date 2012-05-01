@@ -1,5 +1,5 @@
 Board::Application.routes.draw do
-  match 'users/new' => 'users#new'
+  match 'users/new' => 'users#new', :as => "new_user"
   match 'users/:uuid/messages' => 'users#messages'
   match 'users/:uuid/message_keys' => 'users#message_keys'
   # match 'users/:uuid/edit' => 'users#edit', :as => "users_uuid_edit"
