@@ -8,7 +8,7 @@ Board::Application.routes.draw do
   match 'users' => 'users#index', :via => :get, :as => "users"
   match 'users' => 'users#create', :via => :post, :as => "users"
 
-  match 'messages/new' => 'messages#new'
+  match 'messages/new' => 'messages#new', :as => "new_message"
   match 'messages' => 'messages#index', :via => :get, :as => "messages"
   match 'messages' => 'messages#create', :via => :post, :as => "messages"
 
