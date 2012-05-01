@@ -18,7 +18,6 @@ function collect_message() {
                 $("#entropy").text("Sufficient")
                 sjcl.random.stopCollectors()
                 $(window).unbind('mousemove', collect)
-                $("#notice").text("")
 		$("#message").show()
         } else {
                 var percentage = progress * 100;

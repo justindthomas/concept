@@ -84,7 +84,6 @@ function collect() {
 		generate_keys()
 		$("#encrypted").show()
 		$("#passphrase-div").show()
-		$("#notice").text("")
         } else {
 		var percentage = progress * 100;
                 $("#entropy").text(percentage.toFixed(0) + "%")
