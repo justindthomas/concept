@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120428185145) do
+ActiveRecord::Schema.define(:version => 20120430183940) do
 
   create_table "message_keys", :force => true do |t|
     t.integer  "message_id"
@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(:version => 20120428185145) do
     t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "signature"
+    t.integer  "user_id"
   end
 
   create_table "users", :force => true do |t|
@@ -33,6 +35,8 @@ ActiveRecord::Schema.define(:version => 20120428185145) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "encrypted_private_key"
+    t.text     "encrypted_signing_key"
+    t.text     "verification_key"
   end
 
 end

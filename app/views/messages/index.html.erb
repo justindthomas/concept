@@ -3,6 +3,7 @@
 <table>
   <tr>
     <th>Body</th>
+    <th>Signature</th>
     <th></th>
     <th></th>
     <th></th>
@@ -11,6 +12,7 @@
 <% @messages.each do |message| %>
   <tr>
     <td><%= message.body %></td>
+    <td><%= message.signature %></td>
     <td><%= link_to 'Show', message %></td>
     <td><%= link_to 'Edit', edit_message_path(message) %></td>
     <td><%= link_to 'Destroy', message, confirm: 'Are you sure?', method: :delete %></td>

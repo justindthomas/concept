@@ -1,3 +1,14 @@
+<div>
+  <label for="entropy">Entropy:</label>
+  <span id="entropy">0.00</span>
+</div>
+
+<div class="field">
+  <label for="passphrase">Sender Passphrase</label><br />
+  <input id="passphrase" />
+  <span id="authenticated"><%= link_to 'Retrieve and Decrypt Key', '#', :id => 'authenticate' %></span>
+</div>
+
 <%= form_for(@message, :remote => true) do |f| %>
   <% if @message.errors.any? %>
     <div id="error_explanation">
@@ -10,15 +21,24 @@
       </ul>
     </div>
   <% end %>
+  <%= hidden_field_tag "symmetric_key_tag" %>
+
   <div class="field">
-    <label for="recipient_uuid">Recipient UUID</label>
+    <label for="sender_uuid" %>Sender UUID</label><br />
+    <%= text_field_tag "sender_uuid" %>
+  </div>
+
+  <div class="field">
+    <label for="recipient_uuid">Recipient UUID</label><br />
     <%= text_field_tag "recipient_uuid" %>
   </div>
-  <%= hidden_field_tag "symmetric_key_tag" %>
+
   <div class="field">
     <%= f.label :body %><br />
     <%= f.text_area :body %>
   </div>
+
+  <%= f.hidden_field :signature %>
   <div class="actions">
     <%= f.submit %>
   </div>

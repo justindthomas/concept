@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     @messages = @user.messages
 
     respond_to do |format|
-      format.json { render json: @messages }
+      format.json { render json: @messages, :include => [:user] }
     end
   end
 

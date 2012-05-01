@@ -6,7 +6,7 @@ class MessagesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @messages }
+      format.json { render json: @messages, :include => [:user] }
     end
   end
 
@@ -17,7 +17,7 @@ class MessagesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @message }
+      format.json { render json: @message, :include => [:user] }
       format.js { }
     end
   end
@@ -44,13 +44,15 @@ class MessagesController < ApplicationController
   # POST /messages.json
   def create
     @message = Message.new(params[:message])
+    @sender = User.find(:first, :conditions => [ "uuid = ?", params[:sender_uuid]])
+    @message.user_id = @sender.id
     @message.save
 
-    @user = User.find(:first, :conditions => [ "uuid = ?", params[:recipient_uuid]])
+    @recipient = User.find(:first, :conditions => [ "uuid = ?", params[:recipient_uuid]])
 
     @message_key = MessageKey.new
     @message_key.message_id = @message.id;
-    @message_key.user_id = @user.id
+    @message_key.user_id = @recipient.id
     @message_key.encrypted_key = params[:symmetric_key_tag]
     @message_key.save
 
