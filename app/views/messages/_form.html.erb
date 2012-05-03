@@ -1,12 +1,24 @@
-<div>
-  <label for="entropy">Entropy:</label>
-  <span id="entropy">None</span>
+<div id="entropy" style="float:left;position:relative;width:200px;max-height:20px"></div>
+
+<div id="message" style="clear:left;position:relative">
+<div class="field">
+  <label for="passphrase">sender passphrase</label><br />
+  <input id="passphrase" type="text" />
 </div>
 
-<div id="message">
 <div class="field">
-  <label for="passphrase">Sender Passphrase</label><br />
-  <input id="passphrase" />
+  <label for="sender_uuid_input">sender uuid</label><br />
+  <input id="sender_uuid_input" type="text" />
+</div>
+
+<div class="field">
+  <label for="recipient_uuid_input">recipient uuid</label><br />
+  <input id="recipient_uuid_input" type="text" />
+</div>
+
+<div class="field">
+  <label for="message_input">message</label><br />
+  <textarea cols="40" id="message_input" /></textarea>
 </div>
 
 <%= form_for(@message, :remote => true) do |f| %>
@@ -21,22 +33,14 @@
       </ul>
     </div>
   <% end %>
+
   <%= hidden_field_tag "symmetric_key_tag" %>
 
-  <div class="field">
-    <label for="sender_uuid" %>Sender UUID</label><br />
-    <%= text_field_tag "sender_uuid" %>
-  </div>
+  <%= hidden_field_tag "sender_uuid" %>
 
-  <div class="field">
-    <label for="recipient_uuid">Recipient UUID</label><br />
-    <%= text_field_tag "recipient_uuid" %>
-  </div>
+  <%= hidden_field_tag "recipient_uuid" %>
 
-  <div class="field">
-    <%= f.label :body %><br />
-    <%= f.text_area :body %>
-  </div>
+  <%= f.hidden_field :body %>
 
   <%= f.hidden_field :signature %>
   <div class="actions">

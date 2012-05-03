@@ -1,0 +1,54 @@
+jQuery(function($) {
+	var vc = new view_controller()
+
+	$("#retrieve").bind('click', vc.retrieve_messages)
+})
+
+function view_controller() {
+        "use strict"
+
+        if ( !(this instanceof view_controller) ) throw new Error("Constructor called as a function")
+
+	var vc = this
+
+	this.crypto = new crypto()
+
+	this.retrieve_messages = function() {
+		var passphrase = $("#passphrase").val()
+
+		if(!passphrase) {
+			alert("Specify a passphrase!")
+			return
+		}
+
+		var message_keys
+
+		$.ajax({
+                        url: "/users/" + $("#user_uuid").val() + "/message_keys.json",
+                        dataType: "json",
+                        success: function(data) {
+				message_keys = data
+				try {
+					vc.crypto.decrypt_messages(passphrase, message_keys)
+				} catch(e) {
+					alert("incorrect passphrase")
+					return
+				}
+				vc.crypto.verify_messages(message_keys)
+				vc.place_messages(message_keys)
+                        }
+                })
+	}
+
+	this.place_messages = function(message_keys) {
+		if(!message_keys) throw new Error("Invalid argument")
+
+		for(var i = 0; i < message_keys.length; i++) {
+			$("#messages").append("<tr>" + 
+				"<td><span>" + message_keys[i].details.sender.uuid + "</span></td>" +
+				"<td><span>" + message_keys[i].details.message.body + "</span></td>")
+		}	
+	}
+}
+
+

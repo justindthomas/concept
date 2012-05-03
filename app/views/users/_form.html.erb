@@ -1,17 +1,11 @@
-<div>
-  <label for="entropy">Entropy:</label>
-  <span id="entropy">None</span>
+<div id="entropy" style="float:left;position:relative;width:200px;max-height:20px"></div>
+
+<div id="passphrase-div" style="clear:left;position:relative;width:198px">
+  <input id="passphrase" type="text" style="width:100%;border:1px solid #000;background:#e1e1e1;padding:1px" />
+  <%= link_to 'Create', '#', :id => 'create-user' %>
 </div>
 
-<input id="private_key" type="hidden" value="insufficient entropy"/>
-<input id="signing_key" type="hidden" value="insufficient entropy"/>
-
-<div id="passphrase-div">
-  <label for="passphrase">Passphrase</label><br />
-  <input id="passphrase" type="text" size="30" />
-  <span id="encrypted"><%= link_to 'Encrypt Keys', '#', :id => 'encrypt_keys' %></span>
-</div>
-
+<div id="submission" style="clear:left;position:relative">
 <%= form_for(@user, :url => users_path, :remote => true) do |f| %>
   <% if @user.errors.any? %>
     <div id="error_explanation">
@@ -29,8 +23,5 @@
   <%= f.hidden_field :public_key %>
   <%= f.hidden_field :encrypted_signing_key %>
   <%= f.hidden_field :verification_key %>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>
+</div>

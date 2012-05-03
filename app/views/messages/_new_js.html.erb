@@ -1,0 +1,64 @@
+jQuery(function($) {
+        var vc = new view_controller()
+
+        $(window).bind('mousemove', vc.collect)
+        sjcl.random.startCollectors()
+
+	$("#new_message").bind('submit', function(event) { return vc.send_message(event) })
+	$("#entropy").progressbar({ value: 0 })
+	$("#message").hide()
+	$("#instruction").text("move your mouse to generate entropy")
+})
+
+function view_controller() {
+        "use strict"
+
+        if ( !(this instanceof view_controller) ) throw new Error("Constructor called as a function")
+
+        var vc = this
+
+        this.crypto = new crypto()
+
+        this.collect = function () {
+                var progress = sjcl.random.getProgress(10)
+
+                if(progress === undefined || progress == 1) {
+                        sjcl.random.stopCollectors()
+                        $(window).unbind('mousemove', vc.collect)
+			$("#entropy").hide()
+			$("#message").show()
+			$("#instruction").text("")
+                } else {
+                        var percentage = progress * 100;
+			$("#entropy").progressbar({ value: percentage })
+                }
+        }
+
+	this.send_message = function(event) {
+		if(	!$("#passphrase").val() || 
+			!$("#sender_uuid_input").val() || 
+			!$("#recipient_uuid_input").val() || 
+			!$("#message_input").val() ) {
+
+			console.log("invalid argument(s)")
+			event.preventDefault()
+			return false
+		}
+
+		var sender = $("#sender_uuid_input").val().trim()
+		var recipient = $("#recipient_uuid_input").val().trim()
+		var message = $("#message_input").val()
+		var passphrase = $("#passphrase").val()
+
+		var prepared_message = this.crypto.prepare_message(sender, recipient, passphrase, message)
+
+		$("#symmetric_key_tag").val(prepared_message.encrypted_message_key)
+		$("#sender_uuid").val(sender)
+		$("#recipient_uuid").val(recipient)
+		$("#message_body").val(prepared_message.encrypted_message)
+		$("#message_signature").val(prepared_message.signature)
+
+		return true
+	}
+}
+

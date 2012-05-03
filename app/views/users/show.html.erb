@@ -1,8 +1,12 @@
+<% content_for :head do %>
+  <script type="text/javascript">
+    <%= render :partial => "show_js" %>
+  </script>
+<% end %>
+
 <p id="notice"><%= notice %></p>
 
 <input id="user_uuid" type="hidden" value="<%= @user.uuid %>"/>
-<input id="public_key" type="hidden" value="<%= @user.public_key %>"/>
-<input id="encrypted_private_key" type="hidden" value="<%= @user.encrypted_private_key %>"/>
 
 <p>
   <b>UUID:</b>
@@ -12,22 +16,17 @@
 <div>
   <label for="passphrase">Passphrase</label>
   <input type="text" id="passphrase" size="30" />
+  <%= link_to 'Retrieve Messages', '#', :id => 'retrieve' %>
 </div>
-
-<%= link_to 'Decrypt', '#', :id => 'decrypt' %>
 
 <table>
   <thead>
     <tr>
       <th>Sender</th>
       <th>Message</th>
-      <th>Verified</th>
     </tr>
   </thead>
   <tbody id="messages"></tbody>
 </table>
-
-<p id="messages_status">Loading messages...</p>
-<p id="message_keys_status">Loading message keys...</p>
 
 <%= link_to 'Back', users_path %>

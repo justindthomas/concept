@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     @messages = @user.messages
 
     respond_to do |format|
-      format.json { render json: @messages, :include => [:user] }
+      format.json { render :json => @messages.to_json(:include => [:sender]) }
     end
   end
 
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
     @message_keys = @user.message_keys
 
     respond_to do |format|
-      format.json { render json: @message_keys }
+      format.json { render :json => @message_keys, :methods => :details }
     end
   end
 
