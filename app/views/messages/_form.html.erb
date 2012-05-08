@@ -13,7 +13,8 @@
 
 <div class="field">
   <label for="recipient_uuid_input">recipient uuid</label><br />
-  <input id="recipient_uuid_input" type="text" />
+  <input id="recipient_uuid_input" type="text" class="recipient" /><br />
+  <a href="#" id="add_recipient">Add Recipient</a>
 </div>
 
 <div class="field">
@@ -34,11 +35,9 @@
     </div>
   <% end %>
 
-  <%= hidden_field_tag "symmetric_key_tag" %>
-
   <%= hidden_field_tag "sender_uuid" %>
 
-  <%= hidden_field_tag "recipient_uuid" %>
+  <%= hidden_field_tag "recipients" %>
 
   <%= f.hidden_field :body %>
 

@@ -1,44 +1,58 @@
 jQuery(function($) {
-        var vc = new view_controller()
+	var vc = new view_controller()
 
-        $(window).bind('mousemove', vc.collect)
-        sjcl.random.startCollectors()
+	$(window).bind('mousemove', vc.collect)
+	sjcl.random.startCollectors()
 
-	$("#new_message").bind('submit', function(event) { return vc.send_message(event) })
-	$("#entropy").progressbar({ value: 0 })
+	$("button").button()
+	$("#add_recipient").bind('click', vc.add_recipient)
+	
+	$("#new_message").bind('submit', function(event) {
+		return vc.send_message(event)
+	})
+	$("#entropy").progressbar({
+		value : 0
+	})
 	$("#message").hide()
 	$("#instruction").text("move your mouse to generate entropy")
 })
-
 function view_controller() {
-        "use strict"
+	"use strict"
 
-        if ( !(this instanceof view_controller) ) throw new Error("Constructor called as a function")
+	if(!(this instanceof view_controller))
+		throw new Error("Constructor called as a function")
 
-        var vc = this
+	var vc = this
 
-        this.crypto = new crypto()
+	this.crypto = new crypto()
 
-        this.collect = function () {
-                var progress = sjcl.random.getProgress(10)
+	this.collect = function() {
+		var progress = sjcl.random.getProgress(10)
 
-                if(progress === undefined || progress == 1) {
-                        sjcl.random.stopCollectors()
-                        $(window).unbind('mousemove', vc.collect)
+		if(progress === undefined || progress == 1) {
+			sjcl.random.stopCollectors()
+			$(window).unbind('mousemove', vc.collect)
 			$("#entropy").hide()
 			$("#message").show()
 			$("#instruction").text("")
-                } else {
-                        var percentage = progress * 100;
-			$("#entropy").progressbar({ value: percentage })
-                }
-        }
+		} else {
+			var percentage = progress * 100;
+			$("#entropy").progressbar({
+				value : percentage
+			})
+		}
+	}
+	
+	this.add_recipient = function(event) {
+		var recipient_num = $(".recipient").length
+		var next = new Number(recipient_num + 1)
+		
+		var new_recipient_input = $("#recipient_uuid_input").clone().attr("id", "recipient_uuid_input_" + next)	
+		$("#recipient_uuid_input").after(new_recipient_input)
+	}
 
 	this.send_message = function(event) {
-		if(	!$("#passphrase").val() || 
-			!$("#sender_uuid_input").val() || 
-			!$("#recipient_uuid_input").val() || 
-			!$("#message_input").val() ) {
+		if(!$("#passphrase").val() || !$("#sender_uuid_input").val() || !$("#recipient_uuid_input").val() || !$("#message_input").val()) {
 
 			console.log("invalid argument(s)")
 			event.preventDefault()
@@ -46,15 +60,28 @@ function view_controller() {
 		}
 
 		var sender = $("#sender_uuid_input").val().trim()
-		var recipient = $("#recipient_uuid_input").val().trim()
+		var recipients = []
+
+		$(".recipient").each(function(index) {
+			recipients.push($(this).val().trim())
+		})
+		
 		var message = $("#message_input").val()
 		var passphrase = $("#passphrase").val()
 
-		var prepared_message = this.crypto.prepare_message(sender, recipient, passphrase, message)
+		var prepared_message = this.crypto.prepare_message(sender, recipients, passphrase, message)
 
-		$("#symmetric_key_tag").val(prepared_message.encrypted_message_key)
+		for(var i = 0; i < recipients.length; i++) {
+			if($("#recipients").val()) {
+				$("#recipients").val($("#recipients").val() + ":uuid:")
+			}
+			
+			var recipient = recipients[i]
+			$("#recipients").val($("#recipients").val() + recipient + ":key:" + prepared_message.encrypted_message_keys[recipient])	
+		}
+		
 		$("#sender_uuid").val(sender)
-		$("#recipient_uuid").val(recipient)
+		
 		$("#message_body").val(prepared_message.encrypted_message)
 		$("#message_signature").val(prepared_message.signature)
 

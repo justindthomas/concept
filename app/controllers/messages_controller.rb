@@ -47,19 +47,21 @@ class MessagesController < ApplicationController
     @sender = User.find(:first, :conditions => [ "uuid = ?", params[:sender_uuid]])
     @message.user_id = @sender.id
     @message.save
-
-    if params[:recipient_uuid].kind_of?(Array)
-      # Need a different key tag for each recipient; this block for testing only, currently
-    end
     
-    if params[:recipient_uuid].is_a?(String)
-      @recipient = User.find(:first, :conditions => [ "uuid = ?", params[:recipient_uuid]])
-  
-      @message_key = MessageKey.new
-      @message_key.message_id = @message.id;
-      @message_key.user_id = @recipient.id
-      @message_key.encrypted_key = params[:symmetric_key_tag] 
-      @message_key.save
+    if params[:recipients].is_a?(String)
+      recipient_keys = params[:recipients].split(':uuid:')
+      
+      recipient_keys.each do |key|
+        recipient_key = key.split(':key:')
+
+        @recipient = User.find(:first, :conditions => [ "uuid = ?", recipient_key[0]])
+    
+        @message_key = MessageKey.new
+        @message_key.message_id = @message.id;
+        @message_key.user_id = @recipient.id
+        @message_key.encrypted_key = recipient_key[1] 
+        @message_key.save
+      end
     end
 
     respond_to do |format|
