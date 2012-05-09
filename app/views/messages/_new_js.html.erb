@@ -60,7 +60,7 @@ function view_controller() {
 		}
 
 		var sender = $("#sender_uuid_input").val().trim()
-		var recipients = []
+		var recipients = [sender]
 
 		$(".recipient").each(function(index) {
 			recipients.push($(this).val().trim())
