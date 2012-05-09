@@ -5,9 +5,10 @@ jQuery(function($) {
 })
 
 function view_controller() {
-        "use strict"
+	"use strict"
 
-        if ( !(this instanceof view_controller) ) throw new Error("Constructor called as a function")
+	if(!(this instanceof view_controller))
+		throw new Error("Constructor called as a function")
 
 	var vc = this
 
@@ -24,9 +25,9 @@ function view_controller() {
 		var message_keys
 
 		$.ajax({
-                        url: "/users/" + $("#user_uuid").val() + "/message_keys.json",
-                        dataType: "json",
-                        success: function(data) {
+			url : "/users/" + $("#user_uuid").val() + "/message_keys.json",
+			dataType : "json",
+			success : function(data) {
 				message_keys = data
 				try {
 					vc.crypto.decrypt_messages(passphrase, message_keys)
@@ -36,19 +37,17 @@ function view_controller() {
 				}
 				vc.crypto.verify_messages(message_keys)
 				vc.place_messages(message_keys)
-                        }
-                })
+			}
+		})
 	}
 
 	this.place_messages = function(message_keys) {
-		if(!message_keys) throw new Error("Invalid argument")
+		if(!message_keys)
+			throw new Error("Invalid argument")
 
 		for(var i = 0; i < message_keys.length; i++) {
-			$("#messages").append("<tr>" + 
-				"<td><span>" + message_keys[i].details.sender.uuid + "</span></td>" +
-				"<td><span>" + message_keys[i].details.message.body + "</span></td>")
-		}	
+			$("#messages").append("<tr>" + "<td><span>" + message_keys[i].details.sender.uuid + "</span></td>" + "<td><span>" + message_keys[i].details.message.body + "</span></td>")
+		}
 	}
 }
-
 

@@ -19,7 +19,7 @@ function crypto() {
 			var bn = sjcl.bn.fromBits(pvk.exponent)
 			var sec = new sjcl.ecc.elGamal.secretKey(pvk.curve, sjcl.ecc.curves['c' + pvk.curve], bn)
 
-			var sym = sec.unkem(JSON.parse(message_keys[i].encrypted_key))
+			var sym = JSON.parse(sjcl.decrypt(sec, message_keys[i].encrypted_key))
 			var message = sjcl.decrypt(sym, message_keys[i].details.message.body)
 			message_keys[i].details.message.body = message
 		}
