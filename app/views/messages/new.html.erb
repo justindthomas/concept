@@ -1,18 +1,32 @@
 <% content_for :head do %>
-  <script type="text/javascript">
-    <%= render :partial => "new_js" %>
-  </script>
+<script type="text/javascript"><%= render :partial => "new_js" %></script>
 <% end %>
 
 <h3>create new message</h3>
 
 <div style="clear:left;position:relative">
-  <span id="instruction"></span>
+	<span id="instruction"></span>
+</div>
+
+<div id="entropy" style="float:left;position:relative;width:200px;max-height:20px"></div>
+
+<div id="sender_information">
+	<div class="field">
+		<label for="passphrase">sender passphrase</label>
+		<br />
+		<input id="passphrase" type="text" />
+	</div>
+
+	<div class="field">
+		<label for="sender_uuid_input">sender uuid</label>
+		<br />
+		<input id="sender_uuid_input" type="text" />
+	</div>
 </div>
 
 <%= render 'form' %>
 
 <div>
-  <span id="notice"></span>
+	<span id="notice"></span>
 </div>
 

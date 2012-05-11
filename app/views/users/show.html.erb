@@ -4,13 +4,13 @@
   </script>
 <% end %>
 
-<p id="notice"><%= notice %></p>
+<h3>user information</h3>
 
-<input id="user_uuid" type="hidden" value="<%= @user.uuid %>"/>
+<p id="notice"><%= notice %></p>
 
 <p>
   <b>UUID:</b>
-  <%= @user.uuid %>
+  <span id="user_uuid"><%= @user.uuid %></span>
 </p>
 
 <div>
@@ -19,14 +19,27 @@
   <%= link_to 'Retrieve Messages', '#', :id => 'retrieve' %>
 </div>
 
+<hr />
+
+<h3>messages for this user</h3>
+
 <table>
   <thead>
     <tr>
-      <th>Sender</th>
-      <th>Message</th>
+      <th>sender</th>
+      <th>message</th>
     </tr>
   </thead>
   <tbody id="messages"></tbody>
 </table>
+
+<hr />
+
+<h3>create new message</h3>
+
+<div id="entropy_label"><span>move mouse to generate entropy<br />this is necessary to generate keys for new messages</span></div>
+<div id="entropy" style="float:left;position:relative;width:200px;max-height:20px"></div>
+
+<%= render "messages/form" %>
 
 <%= link_to 'Back', users_path %>

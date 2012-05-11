@@ -1,7 +1,20 @@
 jQuery(function($) {
 	var vc = new view_controller()
 
+	$(window).bind('mousemove', vc.collect)
+	sjcl.random.startCollectors()
+	
 	$("#retrieve").bind('click', vc.retrieve_messages)
+	
+	$("#add_recipient").bind('click', vc.add_recipient)
+	
+	$("#entropy").progressbar({
+		value : 0
+	})
+	
+	$("#new_message").bind('submit', function(event) {
+		return vc.send_message(event)
+	})
 })
 
 function view_controller() {
@@ -13,7 +26,71 @@ function view_controller() {
 	var vc = this
 
 	this.crypto = new crypto()
+	
+	this.add_recipient = function(event) {
+		var recipient_num = $(".recipient").length
+		var next = new Number(recipient_num + 1)
+		
+		var new_recipient_input = $("#recipient_uuid_input").clone().attr("id", "recipient_uuid_input_" + next)	
+		$("#recipient_uuid_input").after(new_recipient_input)
+	}
+	
+	this.collect = function() {
+		var progress = sjcl.random.getProgress(10)
 
+		if(progress === undefined || progress == 1) {
+			sjcl.random.stopCollectors()
+			$(window).unbind('mousemove', vc.collect)
+			$("#entropy").hide()
+			$("#entropy_label").hide()
+			$("#message").show()
+			$("#sender_information").show()
+			$("#instruction").text("")
+		} else {
+			var percentage = progress * 100;
+			$("#entropy").progressbar({
+				value : percentage
+			})
+		}
+	}
+
+	this.send_message = function(event) {
+		if(!$("#passphrase").val() || !$("#user_uuid").text() || !$("#recipient_uuid_input").val() || !$("#message_input").val()) {
+
+			console.log("invalid argument(s)")
+			event.preventDefault()
+			return false
+		}
+
+		var sender = $("#user_uuid").text().trim()
+		var recipients = [sender]
+
+		$(".recipient").each(function(index) {
+			recipients.push($(this).val().trim())
+		})
+		
+		var message = $("#message_input").val()
+		var passphrase = $("#passphrase").val()
+
+		var prepared_message = this.crypto.prepare_message(sender, recipients, passphrase, message)
+
+		for(var i = 0; i < recipients.length; i++) {
+			if($("#recipients").val()) {
+				$("#recipients").val($("#recipients").val() + ":uuid:")
+			}
+			
+			var recipient = recipients[i]
+			$("#recipients").val($("#recipients").val() + recipient + ":key:" + prepared_message.encrypted_message_keys[recipient])	
+		}
+		
+		$("#sender_uuid").val(sender)
+		
+		$("#message_body").val(prepared_message.encrypted_message)
+		$("#message_signature").val(prepared_message.signature)
+
+		return true
+	}
+	
 	this.retrieve_messages = function() {
 		var passphrase = $("#passphrase").val()
 
@@ -25,7 +102,7 @@ function view_controller() {
 		var message_keys
 
 		$.ajax({
-			url : "/users/" + $("#user_uuid").val() + "/message_keys.json",
+			url : "/users/" + $("#user_uuid").text() + "/message_keys.json",
 			dataType : "json",
 			success : function(data) {
 				message_keys = data

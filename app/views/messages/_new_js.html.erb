@@ -14,6 +14,7 @@ jQuery(function($) {
 		value : 0
 	})
 	$("#message").hide()
+	$("#sender_information").hide()
 	$("#instruction").text("move your mouse to generate entropy")
 })
 function view_controller() {
@@ -34,6 +35,7 @@ function view_controller() {
 			$(window).unbind('mousemove', vc.collect)
 			$("#entropy").hide()
 			$("#message").show()
+			$("#sender_information").show()
 			$("#instruction").text("")
 		} else {
 			var percentage = progress * 100;
