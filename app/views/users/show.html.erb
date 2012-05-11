@@ -42,22 +42,4 @@
 
 <%= render "messages/form" %>
 
-<hr />
-
-<h3>user list (for convenience)</h3>
-
-<table>
-  <tr>
-    <th>uuid</th>
-    <th></th>
-  </tr>
-
-<% @users.each do |user| %>
-  <tr>
-    <td><%= user.uuid %></td>
-    <td><%= link_to 'Show', users_uuid_path(user.uuid)  %></td>
-  </tr>
-<% end %>
-</table>
-
 <%= link_to 'Back', users_path %>

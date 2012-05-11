@@ -32,9 +32,9 @@ class UsersController < ApplicationController
   # GET /users/uuid
   # GET /users/uuid.json
   def show
+    @users = User.all
     @user = User.find(:first, :conditions => [ "uuid = ?", params[:uuid]])
     @message = Message.new
-    @users = User.all
 
     respond_to do |format|
       format.html # show.html.erb
